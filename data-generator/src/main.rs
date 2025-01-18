@@ -96,8 +96,7 @@ fn main() -> Result<()> {
     let args = Args::parse();
     let mut rng = rand::thread_rng();
 
-    let mut rooms: Vec<Room> = Vec::new();
-    let mut amenity_mapping: Vec<AmenityMapping> = Vec::new();
+    // let mut amenity_mapping: Vec<AmenityMapping> = Vec::new();
 
     let hotels: Vec<Hotel> = (0..args.hotel_count)
         .map(|_| Hotel::random(&mut rng))
@@ -120,8 +119,16 @@ fn main() -> Result<()> {
             .expect("Could not write hotel row")
     });
 
+    let mut room_writer = Writer::from_writer(vec![]);
+    rooms
+        .iter()
+        .for_each(|r| room_writer.serialize(r).expect("could not write room row"));
+
     let hotel_csv_data = String::from_utf8(hotel_writer.into_inner()?)?;
     fs::write("hotels.csv", hotel_csv_data)?;
+
+    let room_csv_data = String::from_utf8(room_writer.into_inner()?)?;
+    fs::write("rooms.csv", room_csv_data)?;
 
     Ok(())
 }

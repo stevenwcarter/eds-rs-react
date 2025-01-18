@@ -1,16 +1,90 @@
-use std::fs;
+use std::{fs, iter::once};
 
 use anyhow::Result;
 use clap::Parser;
 use csv::Writer;
 use faker_rand::en_us::names::FirstName;
+use lipsum::lipsum;
 use rand::{
     distributions::{Distribution, Standard},
-    seq::IteratorRandom,
+    seq::{IteratorRandom, SliceRandom},
     Rng,
 };
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
+
+struct RoomType<'a> {
+    pub name: &'a str,
+    pub amenity_id: u32,
+}
+
+const ROOM_TYPES: [RoomType; 6] = [
+    RoomType {
+        name: "1 King Bed",
+        amenity_id: 100,
+    },
+    RoomType {
+        name: "1 King Suite",
+        amenity_id: 101,
+    },
+    RoomType {
+        name: "1 Queen Bed",
+        amenity_id: 102,
+    },
+    RoomType {
+        name: "1 Queen Suite",
+        amenity_id: 103,
+    },
+    RoomType {
+        name: "2 Full Beds",
+        amenity_id: 104,
+    },
+    RoomType {
+        name: "2 Full Bed Suite",
+        amenity_id: 105,
+    },
+];
+
+const HOTEL_NAME_BEGINNINGS: [&str; 34] = [
+    "Azure Vista",
+    "Sunnybrook",
+    "Luminaria",
+    "Tideside",
+    "Willow Creek",
+    "Timber Creek",
+    "Cedarwood",
+    "Riverview",
+    "Bayside",
+    "Morning Glory",
+    "Oceanview",
+    "Starlight",
+    "Moonlight",
+    "Moondance",
+    "Haven Bay",
+    "Pacifica",
+    "Greenwood",
+    "Redwood",
+    "Blue Horizon",
+    "Seabreeze",
+    "Crestwood",
+    "Whispering Pines",
+    "Sunset Cove",
+    "Crestwood",
+    "Foxglove",
+    "Cypress Pointe",
+    "Driftwood Beach",
+    "Misty Harbor",
+    "Maplewood",
+    "Treetop",
+    "Silverbrook",
+    "Waveside",
+    "Primrose",
+    "Duneside",
+];
+
+const HOTEL_NAME_SUFFIXES: [&str; 10] = [
+    "Hotel", "Inn", "Suites", "Manor", "Resort", "Lodge", "Estate", "Club", "Retreat", "Palace",
+];
 
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
@@ -60,25 +134,40 @@ struct Room {
 }
 
 impl Room {
-    pub fn random<R: Rng + ?Sized>(rng: &mut R, hotel_id: Uuid) -> Self {
+    pub fn random<R: Rng + ?Sized>(rng: &mut R, hotel_id: Uuid) -> (Self, u32) {
         let image_id: u32 = rng.gen_range(1..4);
-        Self {
-            id: Uuid::now_v7(),
-            hotel_id,
-            name: "Some name".to_string(),
-            description: "Some description".to_string(),
-            image: format!("/room-images/room{image_id}.jpg"),
-        }
+        let room_type = ROOM_TYPES
+            .choose(rng)
+            .expect("Could not choose random room type");
+        (
+            Self {
+                id: Uuid::now_v7(),
+                hotel_id,
+                name: room_type.name.to_string(),
+                description: lipsum(150),
+                image: format!("/room-images/room{image_id}.jpg"),
+            },
+            room_type.amenity_id,
+        )
     }
 }
 
 impl Hotel {
     pub fn random<R: Rng + ?Sized>(rng: &mut R) -> Self {
-        let image_id: u32 = rng.gen_range(1..4);
+        let image_id: u32 = rng.gen_range(0..4);
+        let name = format!(
+            "{} {}",
+            HOTEL_NAME_BEGINNINGS
+                .choose(rng)
+                .expect("Unable to choose a prefix"),
+            HOTEL_NAME_SUFFIXES
+                .choose(rng)
+                .expect("Unable to choose a suffix"),
+        );
         Self {
             id: Uuid::now_v7(),
-            name: "Some Name".to_string(),
-            description: "Some Description".to_string(),
+            name,
+            description: lipsum(150),
             region: rand::random(),
             manager_name: rand::random::<FirstName>().to_string(),
             image: format!("/hotel-images/hotel{image_id}.jpg"),
@@ -101,23 +190,24 @@ fn main() -> Result<()> {
         .map(|_| Hotel::random(&mut rng))
         .collect();
 
-    let rooms: Vec<Room> = hotels
+    let rooms: Vec<(Room, u32)> = hotels
         .iter()
         .map(|h| h.id)
         .flat_map(|hotel_id| {
             (0..args.room_count)
                 .map(|_| Room::random(&mut rng, hotel_id))
-                .collect::<Vec<Room>>()
+                .collect::<Vec<(Room, u32)>>()
         })
         .collect();
 
     let amenities: Vec<AmenityMapping> = rooms
         .iter()
-        .map(|r| r.id)
-        .flat_map(|room_id| {
+        .map(|(r, room_amenity_id)| (r.id, room_amenity_id))
+        .flat_map(|(room_id, room_amenity_id)| {
             let amenities: Vec<u32> = (1..25).choose_multiple(&mut rng, 15);
             amenities
                 .iter()
+                .chain(once(room_amenity_id))
                 .map(|&a_id| AmenityMapping {
                     room_id: Some(room_id),
                     hotel_id: None,
@@ -126,6 +216,7 @@ fn main() -> Result<()> {
                 .collect::<Vec<AmenityMapping>>()
         })
         .collect();
+    let rooms: Vec<Room> = rooms.into_iter().map(|(r, _)| r).collect();
 
     let mut hotel_writer = Writer::from_writer(vec![]);
     hotels.iter().for_each(|h| {

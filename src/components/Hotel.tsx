@@ -53,7 +53,7 @@ const HotelDetail = (props: HotelProps) => {
         </div>
       </div>
       <div className="flex flex-col ml-40">
-        {rooms.map((r) => (
+        {rooms.map((r: any) => (
           <Room room={r} key={r.id} />
         ))}
       </div>

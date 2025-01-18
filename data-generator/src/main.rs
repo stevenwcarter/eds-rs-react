@@ -74,7 +74,7 @@ impl Room {
 
 impl Hotel {
     pub fn random<R: Rng + ?Sized>(rng: &mut R) -> Self {
-        let image_id: u32 = rng.gen_range(0..4);
+        let image_id: u32 = rng.gen_range(1..4);
         Self {
             id: Uuid::now_v7(),
             name: "Some Name".to_string(),

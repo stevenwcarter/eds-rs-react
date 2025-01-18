@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { ROOMS_FOR_HOTEL_ID } from '../queries';
 import { useQuery } from '@apollo/client';
+import Room from './Room';
 
 export interface HotelProps {
   hotel: any;
@@ -38,7 +39,7 @@ const HotelDetail = (props: HotelProps) => {
   const roomCount = roomData?.search?.total || 0;
   const rooms = roomData?.search?.data?.map((r: any) => JSON.parse(r)) || [];
   return (
-    <Link to={`/hotel/${hotel.id}`}>
+    <div className="flex flex-col">
       <div className="flex">
         <img
           className="w-[150px] h-[150px] m-4 box-content"
@@ -49,10 +50,14 @@ const HotelDetail = (props: HotelProps) => {
           <h2 className="text-2xl">{hotel.name}</h2>
           <p>{hotel.description}</p>
           <span>Rooms: {roomCount}</span>
-          <pre>{JSON.stringify(rooms, null, 2)}</pre>
         </div>
       </div>
-    </Link>
+      <div className="flex flex-col ml-40">
+        {rooms.map((r) => (
+          <Room room={r} key={r.id} />
+        ))}
+      </div>
+    </div>
   );
 };
 

@@ -44,6 +44,24 @@ export const HOTEL_BY_ID = gql`
     }
   }
 `;
+export const ROOM_BY_ID = gql`
+  query RoomById($id: String!) {
+    search(
+      params: {
+        repo: "main--eds-rs-2025--stevenwcarter"
+        path: "/data.json"
+        sheet: "rooms"
+        searchTerm: $id
+        searchField: "id"
+      }
+    ) {
+      total
+      offset
+      limit
+      data
+    }
+  }
+`;
 
 export const ROOMS_FOR_HOTEL_ID = gql`
   query RoomsForHotelIdQuery($id: String!) {

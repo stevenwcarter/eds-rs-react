@@ -1,9 +1,9 @@
 # TODOs
 
-[ ] Add Room page by ID
-[ ] Update rooms and other types by UUID
-[ ] Write a random data generator for large datasets
-[ ] Add imagery for rooms
+[x] Add Room page by ID
+[x] Update rooms and other types by UUID
+[x] Write a random data generator for large datasets
+[x] Add imagery for rooms
 [ ] Add icons for amenities
 [ ] Add typeahead for room names
 [ ] Optionally add amenities to typeahead

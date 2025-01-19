@@ -14,12 +14,13 @@ const Room = (props: RoomProps) => {
 };
 const RoomSummary = (props: RoomProps) => {
   const { room } = props;
+  const imageUrl = room.image.replace('.jpg', '.150.webp');
   return (
     <Link to={`/room/${room.id}`}>
       <div className="flex">
         <img
           className="w-[150px] h-[150px] m-4 box-content"
-          src={room.image}
+          src={imageUrl}
           alt={room.description}
         />
         <div className="flex flex-col">
@@ -32,12 +33,13 @@ const RoomSummary = (props: RoomProps) => {
 };
 const RoomDetail = (props: RoomProps) => {
   const { room } = props;
+  const imageUrl = room.image.replace('.jpg', '.150.webp');
   return (
     <Link to={`/room/${room.id}`}>
       <div className="flex">
         <img
           className="w-[150px] h-[150px] m-4 box-content"
-          src={room.image}
+          src={imageUrl}
           alt={room.description}
         />
         <div className="flex flex-col">

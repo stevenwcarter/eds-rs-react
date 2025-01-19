@@ -4,7 +4,8 @@ import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-const Index = lazy(() => import('./page/index'));
+const Landing = lazy(() => import('./page/Landing'));
+const HotelList = lazy(() => import('./page/HotelList'));
 const RoomPage = lazy(() => import('./page/RoomPage'));
 const HotelPage = lazy(() => import('./page/HotelPage'));
 const Router = (props: BrowserRouterProps) => <BrowserRouter {...props} />;
@@ -29,7 +30,8 @@ function App() {
         <Router>
           <>
             <Routes>
-              <Route index element={<Index />} />
+              <Route index element={<Landing />} />
+              <Route path="/hotels" element={<HotelList />} />
               <Route path="/room/:id" element={<RoomPage />} />
               <Route path="/hotel/:id" element={<HotelPage />} />
             </Routes>

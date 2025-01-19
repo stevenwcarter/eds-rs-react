@@ -17,14 +17,14 @@ const Hotel = (props: HotelProps) => {
 };
 const HotelSummary = (props: HotelProps) => {
   const { hotel } = props;
-  const imageUrl = hotel.image.replace('.jpg', '.150.webp');
+  const imageUrl = hotel.image.replace('.jpg', '.225.webp');
   return (
     <Link to={`/hotel/${hotel.id}`}>
       <div className="flex">
         <img
-          width="150"
-          height="150"
-          className="w-[150px] h-[150px] m-4 box-content"
+          width="225"
+          height="225"
+          className="w-[225px] h-[225px] m-4 box-content"
           src={imageUrl}
           alt={hotel.description}
         />
@@ -41,14 +41,14 @@ const HotelDetail = (props: HotelProps) => {
   const { data: roomData } = useQuery(ROOMS_FOR_HOTEL_ID, { variables: { id: hotel.id } });
   const roomCount = roomData?.search?.total || 0;
   const rooms = roomData?.search?.data?.map((r: any) => JSON.parse(r)) || [];
-  const imageUrl = hotel.image.replace('.jpg', '.150.webp');
+  const imageUrl = hotel.image.replace('.jpg', '.225.webp');
   return (
     <div className="flex flex-col">
       <div className="flex">
         <img
-          width="150"
-          height="150"
-          className="w-[150px] h-[150px] m-4 box-content"
+          width="225"
+          height="225"
+          className="w-[225px] h-[225px] m-4 box-content"
           src={imageUrl}
           alt={hotel.description}
         />

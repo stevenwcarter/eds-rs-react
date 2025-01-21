@@ -17,7 +17,7 @@ const Hotel = (props: HotelProps) => {
 };
 const HotelSummary = (props: HotelProps) => {
   const { hotel } = props;
-  const imageUrl = hotel.image.replace('.jpg', '.225.webp');
+  const imageUrl = hotel?.image?.replace('.jpg', '.225.webp');
   return (
     <Link to={`/hotel/${hotel.id}`}>
       <div className="flex">
@@ -41,7 +41,7 @@ const HotelDetail = (props: HotelProps) => {
   const { data: roomData } = useQuery(ROOMS_FOR_HOTEL_ID, { variables: { id: hotel.id } });
   const roomCount = roomData?.search?.total || 0;
   const rooms = roomData?.search?.data?.map((r: any) => JSON.parse(r)) || [];
-  const imageUrl = hotel.image.replace('.jpg', '.225.webp');
+  const imageUrl = hotel?.image?.replace('.jpg', '.225.webp');
   return (
     <div className="flex flex-col">
       <div className="flex">

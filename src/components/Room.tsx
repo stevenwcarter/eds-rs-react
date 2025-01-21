@@ -14,7 +14,7 @@ const Room = (props: RoomProps) => {
 };
 const RoomSummary = (props: RoomProps) => {
   const { room } = props;
-  const imageUrl = room.image.replace('.jpg', '.225.webp');
+  const imageUrl = room?.image?.replace('.jpg', '.225.webp');
   return (
     <Link to={`/room/${room.id}`}>
       <div className="flex">
@@ -33,7 +33,7 @@ const RoomSummary = (props: RoomProps) => {
 };
 const RoomDetail = (props: RoomProps) => {
   const { room } = props;
-  const imageUrl = room.image.replace('.jpg', '.225.webp');
+  const imageUrl = room?.image?.replace('.jpg', '.225.webp');
   return (
     <Link to={`/room/${room.id}`}>
       <div className="flex">

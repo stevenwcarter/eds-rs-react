@@ -17,7 +17,8 @@ export default defineConfig({
   server: {
     proxy: {
       '/graphql': {
-        target: 'http://localhost:4000',
+        // target: 'http://localhost:4000',
+        target: 'https://eds-rs-2025.javapl.us',
         changeOrigin: true,
         ws: true,
       },

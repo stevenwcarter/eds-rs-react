@@ -16,7 +16,6 @@ export const Landing = () => {
     }
 
     return results.data.search.data.map((r: any) => JSON.parse(r)).map((r: any) => r.email);
-    // todo
   };
   return (
     <div>

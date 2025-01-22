@@ -44,6 +44,7 @@ const HotelDetail = (props: HotelProps) => {
   const imageUrl = hotel?.image?.replace('.jpg', '.225.webp');
   return (
     <div className="flex flex-col">
+      <h1 className="text-5xl m-6">{hotel.name}</h1>
       <div className="flex">
         <img
           width="225"
@@ -53,12 +54,12 @@ const HotelDetail = (props: HotelProps) => {
           alt={hotel.description}
         />
         <div className="flex flex-col">
-          <h2 className="text-2xl">{hotel.name}</h2>
           <p>{hotel.description}</p>
-          <span>Rooms: {roomCount}</span>
+          <span className="text-xl mt-4">Available Rooms: {roomCount}</span>
         </div>
       </div>
-      <div className="flex flex-col ml-40">
+      <h3 className="text-3xl m-4">Available Rooms</h3>
+      <div className="flex flex-col ml-20">
         {rooms.map((r: any) => (
           <Room room={r} key={r.id} />
         ))}

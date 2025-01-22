@@ -81,3 +81,24 @@ export const ROOMS_FOR_HOTEL_ID = gql`
     }
   }
 `;
+
+export const PEOPLE_TYPEAHEAD_SEARCH = gql`
+  query RoomsForHotelIdQuery($email: String!) {
+    search(
+      params: {
+        repo: "main--eds-rs-2025--stevenwcarter"
+        path: "/data.json"
+        sheet: "people"
+        searchTerm: $email
+        searchField: "email"
+        sortField: "email"
+        field: "email"
+      }
+    ) {
+      total
+      offset
+      limit
+      data
+    }
+  }
+`;

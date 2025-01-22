@@ -1,3 +1,5 @@
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
 
 export interface RoomProps {
@@ -35,7 +37,8 @@ const RoomDetail = (props: RoomProps) => {
   const { room } = props;
   const imageUrl = room?.image?.replace('.jpg', '.225.webp');
   return (
-    <Link to={`/room/${room.id}`}>
+    <div className="flex flex-col">
+      <h1 className="text-5xl">{room.name}</h1>
       <div className="flex">
         <img
           className="w-[225px] h-[225px] m-4 box-content"
@@ -43,12 +46,17 @@ const RoomDetail = (props: RoomProps) => {
           alt={room.description}
         />
         <div className="flex flex-col">
-          <h2 className="text-2xl">{room.name}</h2>
           <p>{room.description}</p>
-          <pre>{JSON.stringify(room, null, 2)}</pre>
+          <Link
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded min-w-36 m-3 text-center self-start"
+            to={`/hotel/${room.hotel_id}`}
+          >
+            <FontAwesomeIcon className="mx-2" icon={faArrowLeft} />
+            Back to Hotel
+          </Link>
         </div>
       </div>
-    </Link>
+    </div>
   );
 };
 

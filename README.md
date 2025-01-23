@@ -13,13 +13,16 @@ capabilities without impacting site speed and overall performance.
 
 To better demonstrate the capabilities of the tool, I've quickly stood up a prototype
 hotel/room browsing experience that is based completely off data within a spreadsheet.
+Please see the [Demo Site](https://eds-rs-2025.javapl.us/) linked here or above.
 A small typeahead example is also included, which reads from a spreadsheet containing
-10,000 fictitious records, and returns those which match the search string entered.
+10,000 fictitious records, and returns just the email address column for those which
+match the search string entered (demonstrating search, sorting, and limiting fields).
 
-I'll continue to develop this experience over the next few weeks, but this experience
-is only meant to demonstrate the capabilities of the service. The true submission for
-Rockstar is the service itself, which will be open-sourced for anyone to deploy themselves
-in the next few weeks (and is feature complete).
+Styling on the demo site is currently _very_ rough. I'll continue to develop the
+experience over the next few weeks, but this experience is only meant to demonstrate
+the capabilities of the service. The true submission for Rockstar is the service itself,
+which will be open-sourced for anyone to deploy themselves in the next few weeks
+(and is feature complete).
 
 [queries.ts](src/queries.ts) - this file contains the GraphQL searches which utilize the service.
 I didn't abstract these, to better demonstrate the ease-of-use of the tool. With further
